@@ -30,7 +30,6 @@ class SocketController extends Controller implements MessageComponentInterface
         $querystring = $conn->httpRequest->getUri()->getQuery();
         parse_str($querystring, $queryarray);
         if (isset($queryarray['token'])) {
-            file_put_contents('some.txt', $querystring, FILE_APPEND);
 
             $user = User::query()
                 ->where('token', $queryarray['token'])
@@ -423,11 +422,8 @@ class SocketController extends Controller implements MessageComponentInterface
 
     public function onError(ConnectionInterface $conn, \Exception $e)
     {
-        file_put_contents('failed_sockets.txt', [
-            'meesage' => $e->getMessage(),
-            'line' => $e->getLine()
-        ]);
-        echo "An error has occurred: {$e->getMessage()} \n";
+        dump("An error has occurred: {$e->getMessage()} \n" .
+            "Line: {$e->getLine()}");
         $conn->close();
     }
 }
